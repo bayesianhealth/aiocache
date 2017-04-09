@@ -60,7 +60,7 @@ class LRUMemoryBackend(SimpleMemoryBackend):
         deleted = await self._delete(key)
 
         if not deleted:
-            self._evict()
+            await self._evict()
 
         SimpleMemoryBackend._cache[key] = value
         if ttl:
