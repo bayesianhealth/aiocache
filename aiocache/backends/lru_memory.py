@@ -1,6 +1,7 @@
 import asyncio
 
 from aiocache.utils import get_cache_value_with_fallbacks
+from aiocache.backends import SimpleMemoryBackend
 
 
 class LRUMemoryBackend(SimpleMemoryBackend):
