@@ -7,7 +7,7 @@ import aiocache
 
 from aiocache.log import logger
 from aiocache.utils import get_cache_value_with_fallbacks
-from aiocache.backends import SimpleMemoryBackend, RedisBackend, MemcachedBackend
+from aiocache.backends import SimpleMemoryBackend, LRUMemoryBackend, RedisBackend, MemcachedBackend
 
 
 class API:
@@ -432,6 +432,30 @@ class SimpleMemoryCache(SimpleMemoryBackend, BaseCache):
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+
+class LRUMemoryCache(LRUMemoryBackend, BaseCache):
+    """
+    :class:`aiocache.backends.LRUMemoryBackend` cache implementation with
+    the following components as defaults:
+      - serializer: :class:`aiocache.serializers.DefaultSerializer`
+      - plugins: None
+
+    Config options are:
+
+    :param serializer: obj with :class:`aiocache.serializers.DefaultSerializer` interface.
+    :param plugins: list of :class:`aiocache.plugins.BasePlugin` derived classes.
+    :param namespace: string to use as default prefix for the key used in all operations of
+        the backend.
+    :param timeout: int or float in seconds specifying maximum timeout for the operations to last.
+        By default its 5.
+    :param max_size: int specifying the maximum number of keys to hold in the cache.
+    """
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def __repr__(self):  # pragma: no cover
+        return "LRUMemoryCache ({})".format(self.max_size)
 
 
 class RedisCache(RedisBackend, BaseCache):
