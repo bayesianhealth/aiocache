@@ -39,9 +39,7 @@ class LRUMemoryBackend(SimpleMemoryBackend):
         """
         if self.max_size > 0 and len(SimpleMemoryBackend._cache) > self.max_size:
             keys_to_evict = list(SimpleMemoryBackend._cache.keys())[:self.max_size]
-            for k in keys_to_evict:
-                SimpleMemoryBackend._cache.pop(k)
-
+            await asyncio.gather(*[self._delete(k) for k in keys_to_evict])
             return len(keys_to_evict)
         else:
             return 0
@@ -59,7 +57,7 @@ class LRUMemoryBackend(SimpleMemoryBackend):
         # We must evict unless we successfully remove a key.
         # This is because we are guaranteed to insert the item with the
         # []-operator if the key does not already exist in the dict.
-        deleted = self.__delete(key)
+        deleted = await self._delete(key)
 
         if not deleted:
             self._evict()
