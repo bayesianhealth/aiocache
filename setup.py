@@ -1,10 +1,10 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="aiocache",
-    version="0.3.3",
+    name="aiocache-lru",
+    version="0.0.1",
     author="Manuel Miranda",
-    url="https://github.com/argaen/aiocache",
+    url="https://github.com/yanif/aiocache",
     author_email="manu.mirandad@gmail.com",
     description="multi backend asyncio cache",
     classifiers=[
