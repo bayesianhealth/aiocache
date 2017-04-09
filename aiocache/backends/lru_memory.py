@@ -87,3 +87,6 @@ class LRUMemoryBackend(SimpleMemoryBackend):
 
         await self._set(key, value, ttl=ttl)
         return True
+
+    def __delete(self, key):
+        return super().__delete(key)
