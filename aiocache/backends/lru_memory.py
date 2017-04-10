@@ -65,7 +65,7 @@ class LRUMemoryBackend(SimpleMemoryBackend):
         SimpleMemoryBackend._cache[key] = value
         if ttl:
             loop = asyncio.get_event_loop()
-            SimpleMemoryBackend._handlers[key] = loop.call_later(ttl, self.__delete, key)
+            SimpleMemoryBackend._handlers[key] = loop.call_later(ttl, super().__delete, key)
         return True
 
     async def _add(self, key, value, ttl=None):
@@ -87,6 +87,3 @@ class LRUMemoryBackend(SimpleMemoryBackend):
 
         await self._set(key, value, ttl=ttl)
         return True
-
-    def __delete(self, key):
-        return SimpleMemoryBackend.__delete(key)
