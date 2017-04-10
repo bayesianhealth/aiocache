@@ -89,4 +89,5 @@ class LRUMemoryBackend(SimpleMemoryBackend):
         return True
 
     def __delete(self, key):
+        print(dir(super()))
         return super().__delete(key)
