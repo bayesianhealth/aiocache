@@ -62,7 +62,7 @@ class LRUMemoryBackend(SimpleMemoryBackend):
         if not deleted:
             await self._evict()
 
-        super()._set(key, value, ttl=ttl)
+        return await super()._set(key, value, ttl=ttl)
 
     async def _add(self, key, value, ttl=None):
         """
