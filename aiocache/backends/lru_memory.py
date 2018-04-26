@@ -37,10 +37,14 @@ class LRUMemoryBackend(SimpleMemoryBackend):
 
         :returns: The number of keys evicted
         """
-        if self.max_size > 0 and len(SimpleMemoryBackend._cache) > self.max_size:
-            keys_to_evict = list(SimpleMemoryBackend._cache.keys())[:self.max_size]
-            await asyncio.gather(*[self._delete(k) for k in keys_to_evict])
-            return len(keys_to_evict)
+        if self.max_size > 0:
+            num_keys = len(SimpleMemoryBackend._cache)
+            if num_keys > self.max_size:
+                keys_to_evict = list(SimpleMemoryBackend._cache.keys())[:(num_keys - self.max_size)]
+                await asyncio.gather(*[self._delete(k) for k in keys_to_evict])
+                return len(keys_to_evict)
+            else:
+                return 0
         else:
             return 0
 
