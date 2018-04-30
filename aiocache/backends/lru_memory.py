@@ -32,15 +32,17 @@ class LRUMemoryBackend(SimpleMemoryBackend):
         super().__init__(**kwargs)
 
     async def _evict(self):
-        """
-        Evicts the oldest entries as needed if the cache exceeds its max size.
+        """Evicts the oldest entries if the cache exceeds its max size.
+
+        Eviction results in a cache that is up to 0.9 * max_size
 
         :returns: The number of keys evicted
         """
         if self.max_size > 0:
             num_keys = len(SimpleMemoryBackend._cache)
             if num_keys > self.max_size:
-                keys_to_evict = list(SimpleMemoryBackend._cache.keys())[:(num_keys - self.max_size)]
+                num_to_evict = num_keys - int(0.9 * self.max_size)
+                keys_to_evict = list(SimpleMemoryBackend._cache.keys())[:num_to_evict]
                 await asyncio.gather(*[self._delete(k) for k in keys_to_evict])
                 return len(keys_to_evict)
             else:
